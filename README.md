@@ -1,17 +1,12 @@
-# vMohammad's Luna Plugins
+# thororen1234's Luna Plugins
 
-A collection of plugins for **[Tidal Luna](https://github.com/Inrixia/TidaLuna)** by vMohammad.
+A collection of plugins for **[Tidal Luna](https://github.com/Inrixia/TidaLuna)** by thororen1234.
 
 ## Plugins
 
-### @vmohammad/lrclib
+### @thororen1234/RPC
 
-Uses [lrclib](https://lrclib.net) to fetch lyrics when Tidal (Musixmatch) fails to provide them.
-
-### @vmohammad/translate
-
-Uses [Google Translate](https://translate.google.com/) to translate lyrics into your preferred language.
-
+DiscordRPC with a playing from button
 
 ## Usage
 

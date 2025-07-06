@@ -1,20 +1,21 @@
 {
-	"name": "@vmohammad/plugins",
-	"description": "A collection of plugins for TidaLuna made by vMohammad",
+	"name": "@thororen1234/plugins",
+	"description": "A collection of plugins for TidaLuna made by thororen1234",
 	"type": "module",
-	"author": "vMohammad",
+	"author": "thororen1234",
 	"scripts": {
 		"watch": "concurrently \"pnpm:build --watch\" pnpm:serve",
 		"build": "rimraf ./dist && tsx esbuild.config.ts",
 		"serve": "http-server ./dist -p 3000 -s --cors -c-1"
 	},
 	"devDependencies": {
+		"@inrixia/helpers": "^3.15.1",
 		"@types/node": "^22.15.29",
 		"@types/react": "^19.1.6",
 		"@types/react-dom": "^19.1.5",
 		"concurrently": "^9.1.2",
 		"http-server": "^14.1.1",
-		"luna": "github:Inrixia/TidaLuna#81369c7",
+		"luna": "github:Inrixia/TidaLuna#98b7912",
 		"oby": "^15.1.2",
 		"rimraf": "^6.0.1",
 		"tsx": "^4.19.4",

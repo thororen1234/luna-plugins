@@ -1,0 +1,14 @@
+{
+	"name": "RPC",
+	"description": "Show off what you are listening to in your Discord status",
+	"homepage": "https://github.com/Inrixia/luna-plugins#DiscordRPC",
+	"author": {
+		"name": "thororen1234",
+		"url": "https://github.com/thororen1234",
+		"avatarUrl": "https://avatars.githubusercontent.com/u/78185467"
+	},
+	"exports": "./src/index.ts",
+	"dependencies": {
+		"@xhayper/discord-rpc": "^1.2.1"
+	}
+}
