@@ -33,7 +33,7 @@ export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 		},
 		{
 			url: `https://desktop.tidal.com/browse/${sourceUrl}`,
-			label: `Playing From: ${toTitleCase(fmtStr(sourceName) ?? "Unknown")}`,
+			label: `${toTitleCase(fmtStr(sourceName) ?? "Unknown")}`,
 		}
 	];
 
