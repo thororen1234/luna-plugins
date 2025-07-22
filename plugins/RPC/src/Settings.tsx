@@ -9,12 +9,14 @@ import { updateActivity } from "./updateActivity";
 export const settings = await ReactiveStore.getPluginStorage("DiscordRPC", {
 	displayOnPause: true,
 	displayArtistIcon: true,
+	displayMediaType: true,
 	status: 1,
 });
 
 export const Settings = () => {
 	const [displayOnPause, setDisplayOnPause] = React.useState(settings.displayOnPause);
 	const [displayArtistIcon, setDisplayArtistIcon] = React.useState(settings.displayArtistIcon);
+	const [displayMediaType, setDisplayMediaType] = React.useState(settings.displayMediaType)
 	const [status, setStatus] = React.useState(settings.status);
 
 	return (
@@ -23,9 +25,8 @@ export const Settings = () => {
 				title="Display activity when paused"
 				desc="If disabled, when paused discord wont show the activity"
 				tooltip="Display activity"
-				// @ts-ignore
 				checked={displayOnPause}
-				onChange={(_: any, checked: boolean) => {
+				onChange={(_, checked) => {
 					setDisplayOnPause((settings.displayOnPause = checked));
 					updateActivity()
 						.then(() => (errSignal!._ = undefined))
@@ -36,10 +37,21 @@ export const Settings = () => {
 				title="Display artist icon"
 				desc="Shows the artist icon in the activity"
 				tooltip="Display artist icon"
-				// @ts-ignore
 				checked={displayArtistIcon}
-				onChange={(_: any, checked: boolean) => {
+				onChange={(_, checked) => {
 					setDisplayArtistIcon((settings.displayArtistIcon = checked));
+					updateActivity()
+						.then(() => (errSignal!._ = undefined))
+						.catch(trace.err.withContext("Failed to set activity"));
+				}}
+			/>
+			<LunaSwitchSetting
+				title="Display media type"
+				desc="Shows the media type as a button in the activity"
+				tooltip="Display media type"
+				checked={displayMediaType}
+				onChange={(_, checked) => {
+					setDisplayMediaType((settings.displayMediaType = checked));
 					updateActivity()
 						.then(() => (errSignal!._ = undefined))
 						.catch(trace.err.withContext("Failed to set activity"));
@@ -49,7 +61,7 @@ export const Settings = () => {
 				title="Status text"
 				desc="What text that you're 'Listening to' in your Discord status."
 				value={status}
-				onChange={(e: { target: { value: string; }; }) => setStatus((settings.status = parseInt(e.target.value)))}
+				onChange={(e) => setStatus((settings.status = parseInt(e.target.value)))}
 			>
 				<LunaSelectItem value="0" children="Listening to TIDAL" />
 				<LunaSelectItem value="1" children="Listening to [Artist Name]" />
