@@ -11,11 +11,6 @@ const fmtStr = (s?: string) => {
 	if (s.length < 2) s += " ";
 	return s.length >= STR_MAX_LEN ? s.slice(0, STR_MAX_LEN - 3) + "..." : s;
 };
-const toTitleCase = (str: string) => {
-	return str.replace(/\w\S*/g, txt => {
-		return txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase()
-	})
-};
 
 export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 	if (!PlayState.playing && !settings.displayOnPause) return await setActivity();
@@ -23,33 +18,46 @@ export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 	mediaItem ??= await MediaItem.fromPlaybackContext();
 	if (mediaItem === undefined) return;
 
-	const activity: SetActivity = { type: 2 }; // Listening type
 	const { sourceName, sourceUrl } = redux.store.getState().playQueue;
+
+	const activity: SetActivity = { type: 2 }; // Listening type
+
+	const trackUrl = `https://tidal.com/browse/${mediaItem.tidalItem.contentType}/${mediaItem.id}?u`
+
+	const trackSourceUrl = `https://tidal.com/browse${sourceUrl}`;
 
 	activity.buttons = [
 		{
-			url: `https://tidal.com/browse/${mediaItem.tidalItem.contentType}/${mediaItem.id}?u`,
+			url: trackUrl,
 			label: "Play Song",
 		},
 		{
-			url: `https://desktop.tidal.com/browse/${sourceUrl}`,
-			label: `${toTitleCase(fmtStr(sourceName) ?? "Unknown")}`,
+			url: trackSourceUrl,
+			label: `${fmtStr(sourceName) ?? "Unknown Source"}`,
 		}
 	];
 
+	const artist = await mediaItem.artist();
+	const artistUrl = `https://tidal.com/browse/artist/${artist?.id}?u`;
+
+	// Status text
+	activity.statusDisplayType = settings.status;
+
 	// Title
 	activity.details = await mediaItem.title().then(fmtStr);
+	activity.detailsUrl = trackUrl;
 	// Artists
 	const artistNames = await MediaItem.artistNames(await mediaItem.artists());
 	activity.state = fmtStr(artistNames.join(", ")) ?? "Unknown Artist";
+	activity.stateUrl = artistUrl;
 
 	// Pause indicator
 	if (PlayState.playing) {
 		// Small Artist image
 		if (settings.displayArtistIcon) {
-			const artist = await mediaItem.artist();
 			activity.smallImageKey = artist?.coverUrl("320");
 			activity.smallImageText = fmtStr(artist?.name);
+			activity.smallImageUrl = artistUrl;
 		}
 
 		// Playback/Time
@@ -68,6 +76,7 @@ export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 	if (album) {
 		activity.largeImageKey = album.coverUrl();
 		activity.largeImageText = await album.title().then(fmtStr);
+		activity.largeImageUrl = `https://tidal.com/browse/album/${album.id}?u`;
 	}
 
 	await setActivity(activity);
