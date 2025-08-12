@@ -20,24 +20,31 @@ export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 	mediaItem ??= await MediaItem.fromPlaybackContext();
 	if (mediaItem === undefined) return;
 
-	const { sourceName, sourceUrl } = redux.store.getState().playQueue;
+	const { playbackControls, playQueue } = redux.store.getState();
 
 	const activity: SetActivity = { type: 2 }; // Listening type
 
 	const trackUrl = `https://tidal.com/browse/${mediaItem.tidalItem.contentType}/${mediaItem.id}?u`
 
-	const trackSourceUrl = `https://tidal.com/browse${sourceUrl}`;
-
 	activity.buttons = [
 		{
 			url: trackUrl,
 			label: "Play Song",
-		},
-		{
-			url: trackSourceUrl,
-			label: `${fmtStr(sourceName, true) ?? "Unknown Source"}`,
 		}
 	];
+
+	// Set Custom Activity Name
+	const { volume } = playbackControls;
+	activity.name = `Tidal @ ${volume} Volume`;
+
+	// Playing From Source Name
+	const { sourceName, sourceUrl } = playQueue;
+	const trackSourceUrl = `https://tidal.com/browse${sourceUrl}`;
+
+	activity.buttons.push({
+		url: trackSourceUrl,
+		label: `${fmtStr(sourceName, true) ?? "Unknown Source"}`,
+	})
 
 	const artist = await mediaItem.artist();
 	const artistUrl = `https://tidal.com/browse/artist/${artist?.id}?u`;
@@ -48,6 +55,7 @@ export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 	// Title
 	activity.details = await mediaItem.title().then(fmtStr);
 	activity.detailsUrl = trackUrl;
+
 	// Artists
 	const artistNames = await MediaItem.artistNames(await mediaItem.artists());
 	activity.state = fmtStr(artistNames.join(", ")) ?? "Unknown Artist";
