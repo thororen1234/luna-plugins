@@ -41,7 +41,7 @@ export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 
 	activity.buttons.push({
 		url: trackSourceUrl,
-		label: `${fmtStr(sourceName, true) ?? "Unknown Source"}`,
+		label: `Playing: ${fmtStr(sourceName, true) ?? "Unknown Source"}`,
 	})
 
 	const artist = await mediaItem.artist();
