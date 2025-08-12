@@ -10,8 +10,17 @@ const DC_STR_MAX_LEN = 31;
 const fmtStr = (s?: string, dc?: boolean) => {
 	if (!s) return;
 	if (s.length < 2) s += " ";
-	if (dc) return s.length >= DC_STR_MAX_LEN ? s.slice(0, DC_STR_MAX_LEN - 3) + "..." : s;
-	return s.length >= STR_MAX_LEN ? s.slice(0, STR_MAX_LEN - 3) + "..." : s;
+
+	if (dc) {
+		s = s.replace(/\b\w/g, c => c.toUpperCase());
+		return s.length >= DC_STR_MAX_LEN
+			? s.slice(0, DC_STR_MAX_LEN - 3) + "..."
+			: s;
+	}
+
+	return s.length >= STR_MAX_LEN
+		? s.slice(0, STR_MAX_LEN - 3) + "..."
+		: s;
 };
 
 export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
