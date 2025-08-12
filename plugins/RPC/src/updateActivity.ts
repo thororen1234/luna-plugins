@@ -26,16 +26,14 @@ export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 
 	const trackUrl = `https://tidal.com/browse/${mediaItem.tidalItem.contentType}/${mediaItem.id}?u`
 
+	const { volume } = playbackControls;
+
 	activity.buttons = [
 		{
 			url: trackUrl,
-			label: "Play Song",
+			label: `Playing Song @ ${volume} Volume`,
 		}
 	];
-
-	// Set Custom Activity Name
-	const { volume } = playbackControls;
-	activity.name = `Tidal @ ${volume} Volume`;
 
 	// Playing From Source Name
 	const { sourceName, sourceUrl } = playQueue;
