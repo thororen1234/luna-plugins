@@ -31,7 +31,7 @@ export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 	activity.buttons = [
 		{
 			url: trackUrl,
-			label: `Playing Song @ ${volume} Volume`,
+			label: `Playing Song @ ${volume}% Volume`,
 		}
 	];
 
