@@ -9,14 +9,16 @@ export const { trace, errSignal } = Tracer("[DiscordRPC]");
 export { Settings } from "./Settings";
 
 redux.intercept([
+	// Seeking
 	"playbackControls/TIME_UPDATE",
 	"playbackControls/SEEK",
 	"playbackControls/SET_PLAYBACK_STATE",
+	// Volume
 	"playbackControls/SET_VOLUME",
+	"playbackControls/TOGGLE_MUTE",
 	"playbackControls/INCREASE_VOLUME",
 	"playbackControls/DECREASE_VOLUME",
 	"playbackControls/SET_VOLUME_UNMUTE",
-	"playbackControlsActions/INDICATE_VOLUME"
 ], unloads, () => {
 	updateActivity()
 		.then(() => (errSignal!._ = undefined))
