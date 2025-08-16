@@ -5,7 +5,7 @@ import { cleanupRPC } from "./discord.native";
 import { updateActivity } from "./updateActivity";
 
 export const unloads = new Set<LunaUnload>();
-export const { trace, errSignal } = Tracer("[DiscordRPC]");
+export const { trace, errSignal } = Tracer("[BetterDiscordRPC]");
 export { Settings } from "./Settings";
 
 redux.intercept([
@@ -19,7 +19,8 @@ redux.intercept([
 	"playbackControls/INCREASE_VOLUME",
 	"playbackControls/DECREASE_VOLUME",
 	"playbackControls/SET_VOLUME_UNMUTE",
-], unloads, () => {
+], unloads, (action) => {
+	console.log("Redux volume action:", action);
 	updateActivity()
 		.then(() => (errSignal!._ = undefined))
 		.catch(trace.err.withContext("Failed to set activity"));
@@ -28,3 +29,21 @@ unloads.add(MediaItem.onMediaTransition(unloads, updateActivity));
 unloads.add(cleanupRPC.bind(cleanupRPC));
 
 setTimeout(updateActivity);
+
+let lastVol: number | undefined = undefined;
+let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+
+const unsub = redux.store.subscribe(() => {
+	const state = redux.store.getState();
+	const vol = state.playbackControls?.volume;
+
+	if (vol !== lastVol) {
+		lastVol = vol;
+		if (debounceTimer) clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(() => {
+			updateActivity().catch(trace.err.withContext("Failed to set activity"));
+		}, 300);
+	}
+});
+
+unloads.add(unsub);
