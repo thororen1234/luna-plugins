@@ -49,7 +49,7 @@ export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 	const trackSourceUrl = `https://tidal.com/browse${sourceUrl}`;
 
 	activity.buttons.push({
-		url: trackSourceUrl,
+		url: trackSourceUrl ?? "https://example.com",
 		label: `Playing: ${fmtStr(sourceName, true) ?? "Unknown Source"}`,
 	})
 
