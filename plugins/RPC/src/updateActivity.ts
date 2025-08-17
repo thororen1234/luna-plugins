@@ -13,7 +13,7 @@ const fmtStr = (s?: string, dc?: boolean) => {
 	if (s.length < 2) s += " ";
 
 	if (dc) {
-		s = s.replace(/\b\w/g, c => c.toUpperCase());
+		s = s.replace(/\b[a-z]/g, match => match.toUpperCase());
 		return s.length > DC_STR_MAX_LEN
 			? s.slice(0, DC_STR_MAX_LEN - 3) + "..."
 			: s;
