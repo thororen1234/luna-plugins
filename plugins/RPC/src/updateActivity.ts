@@ -6,7 +6,7 @@ import { setActivity } from "./discord.native";
 import { settings } from "./Settings";
 
 const STR_MAX_LEN = 127;
-const DC_STR_MAX_LEN = 28;
+const DC_STR_MAX_LEN = 22;
 
 const fmtStr = (s?: string, dc?: boolean) => {
 	if (!s) return;
