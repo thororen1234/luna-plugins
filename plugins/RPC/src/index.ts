@@ -19,8 +19,7 @@ redux.intercept([
 	"playbackControls/INCREASE_VOLUME",
 	"playbackControls/DECREASE_VOLUME",
 	"playbackControls/SET_VOLUME_UNMUTE",
-], unloads, (action) => {
-	console.log("Redux volume action:", action);
+], unloads, () => {
 	updateActivity()
 		.then(() => (errSignal!._ = undefined))
 		.catch(trace.err.withContext("Failed to set activity"));
