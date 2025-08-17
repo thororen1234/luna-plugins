@@ -6,14 +6,15 @@ import { setActivity } from "./discord.native";
 import { settings } from "./Settings";
 
 const STR_MAX_LEN = 127;
-const DC_STR_MAX_LEN = 31;
+const DC_STR_MAX_LEN = 28;
+
 const fmtStr = (s?: string, dc?: boolean) => {
 	if (!s) return;
 	if (s.length < 2) s += " ";
 
 	if (dc) {
 		s = s.replace(/\b\w/g, c => c.toUpperCase());
-		return s.length >= DC_STR_MAX_LEN
+		return s.length > DC_STR_MAX_LEN
 			? s.slice(0, DC_STR_MAX_LEN - 3) + "..."
 			: s;
 	}
