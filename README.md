@@ -1,6 +1,6 @@
-# thororen1234's Luna Plugins
+# thororen's Luna Plugins
 
-A collection of plugins for **[Tidal Luna](https://github.com/Inrixia/TidaLuna)** by thororen1234.
+A collection of plugins for **[Tidal Luna](https://github.com/Inrixia/TidaLuna)** by thororen.
 
 ## Plugins
 
