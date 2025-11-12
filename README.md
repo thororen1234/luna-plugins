@@ -4,7 +4,7 @@ A collection of plugins for **[Tidal Luna](https://github.com/Inrixia/TidaLuna)*
 
 ## Plugins
 
-### @thororen1234/BetterDiscordRPC
+### @thororen/rpc
 
 Tidal DiscordRPC with a extra features
 

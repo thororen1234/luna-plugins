@@ -5,7 +5,7 @@ import { cleanupRPC } from "./discord.native";
 import { updateActivity } from "./updateActivity";
 
 export const unloads = new Set<LunaUnload>();
-export const { trace, errSignal } = Tracer("[BetterDiscordRPC]");
+export const { trace, errSignal } = Tracer("[@thororen/rpc]");
 export { Settings } from "./Settings";
 
 redux.intercept([

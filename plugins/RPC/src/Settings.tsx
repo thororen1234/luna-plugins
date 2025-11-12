@@ -6,7 +6,7 @@ import React from "react";
 import { errSignal, trace } from ".";
 import { updateActivity } from "./updateActivity";
 
-export const settings = await ReactiveStore.getPluginStorage("BetterDiscordRPC", {
+export const settings = await ReactiveStore.getPluginStorage("@thororen/rpc", {
 	displayOnPause: true,
 	displayArtistIcon: true,
 	status: 1,
