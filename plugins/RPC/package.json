@@ -1,5 +1,5 @@
 {
-	"name": "BetterDiscordRPC",
+	"name": "@thororen/rpc",
 	"description": "Show off what you are listening to in your Discord status",
 	"homepage": "https://github.com/Inrixia/luna-plugins#BetterDiscordRPC",
 	"author": {
