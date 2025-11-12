@@ -1,8 +1,8 @@
 {
-	"name": "@thororen1234/plugins",
-	"description": "A collection of plugins for TidaLuna made by thororen1234",
+	"name": "@thororen/plugins",
+	"description": "A collection of plugins for TidaLuna made by thororen",
 	"type": "module",
-	"author": "thororen1234",
+	"author": "thororen",
 	"scripts": {
 		"watch": "concurrently \"pnpm:build --watch\" pnpm:serve",
 		"build": "rimraf ./dist && tsx esbuild.config.ts",
