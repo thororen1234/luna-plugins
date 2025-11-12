@@ -24,7 +24,7 @@ jobs:
       node-version: latest
 
    - name: Install dependencies 📥
-     run: pnpm install
+     run: pnpm install --no-frozen-lockfile
 
    - name: Build
      run: pnpm run build
