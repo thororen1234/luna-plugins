@@ -23,7 +23,7 @@ export const Settings = () => {
                 desc="The port the API server will listen on (defaults to 24123)"
                 value={port}
                 type="number"
-                onChange={(e: { target: { value: any; }; }) => {
+                onChange={(e) => {
                     setPort(Number(e.target.value));
                     debounceValue(Number(e.target.value));
                 }}
