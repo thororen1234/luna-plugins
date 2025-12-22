@@ -46,8 +46,10 @@ export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 	];
 
 	// Playing From Source Name
-	const { sourceName, sourceUrl } = playQueue;
+	let { sourceName, sourceUrl } = playQueue;
 	const trackSourceUrl = `https://tidal.com/browse${sourceUrl}`;
+
+	if (sourceName === "Tracks") sourceName = "Favorite Tracks"
 
 	activity.buttons.push({
 		url: trackSourceUrl ?? "https://example.com",
@@ -58,7 +60,7 @@ export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 	const artistUrl = `https://tidal.com/browse/artist/${artist?.id}?u`;
 
 	// Status text
-	activity.statusDisplayType = settings.status;
+	activity.statusDisplayType = settings.status === "tidal" ? 0 : settings.status === "artist" ? 1 : 2;
 
 	// Title
 	activity.details = await mediaItem.title().then(fmtStr);

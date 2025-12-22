@@ -9,8 +9,13 @@ import { updateActivity } from "./updateActivity";
 export const settings = await ReactiveStore.getPluginStorage("@thororen/rpc", {
 	displayOnPause: true,
 	displayArtistIcon: true,
-	status: 1,
+	status: "tidal",
 });
+
+// status
+// tidal = 0
+// artist = 1
+// track = 2
 
 export const Settings = () => {
 	const [displayOnPause, setDisplayOnPause] = React.useState(settings.displayOnPause);
@@ -49,11 +54,11 @@ export const Settings = () => {
 				title="Status text"
 				desc="What text that you're 'Listening to' in your Discord status."
 				value={status}
-				onChange={(e: { target: { value: string; }; }) => setStatus((settings.status = parseInt(e.target.value)))}
+				onChange={(e: { target: { value: string; }; }) => setStatus((settings.status = e.target.value))}
 			>
-				<LunaSelectItem value="0" children="Listening to TIDAL" />
-				<LunaSelectItem value="1" children="Listening to [Artist Name]" />
-				<LunaSelectItem value="2" children="Listening to [Track Name]" />
+				<LunaSelectItem value="tidal" children="Listening to TIDAL" />
+				<LunaSelectItem value="artist" children="Listening to [Artist Name]" />
+				<LunaSelectItem value="track" children="Listening to [Track Name]" />
 			</LunaSelectSetting>
 		</LunaSettings>
 	);
