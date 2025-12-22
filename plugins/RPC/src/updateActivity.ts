@@ -60,7 +60,7 @@ export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 	const artistUrl = `https://tidal.com/browse/artist/${artist?.id}?u`;
 
 	// Status text
-	activity.statusDisplayType = settings.status === "tidal" ? 0 : settings.status === "artist" ? 1 : 2;
+	activity.statusDisplayType = Number(settings.status);
 
 	// Title
 	activity.details = await mediaItem.title().then(fmtStr);
