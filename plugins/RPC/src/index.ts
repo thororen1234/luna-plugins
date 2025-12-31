@@ -10,7 +10,6 @@ export { Settings } from "./Settings";
 
 redux.intercept([
 	// Seeking
-	"playbackControls/TIME_UPDATE",
 	"playbackControls/SEEK",
 	"playbackControls/SET_PLAYBACK_STATE",
 	// Volume
@@ -24,7 +23,11 @@ redux.intercept([
 		.then(() => (errSignal!._ = undefined))
 		.catch(trace.err.withContext("Failed to set activity"));
 });
-unloads.add(MediaItem.onMediaTransition(unloads, updateActivity));
+MediaItem.onMediaTransition(unloads, (mediaItem) => {
+	updateActivity(mediaItem)
+		.then(() => (errSignal!._ = undefined))
+		.catch(trace.err.withContext("Failed to set activity"));
+});
 unloads.add(cleanupRPC.bind(cleanupRPC));
 
 setTimeout(updateActivity);

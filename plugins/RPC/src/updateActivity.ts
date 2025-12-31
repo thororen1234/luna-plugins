@@ -1,75 +1,61 @@
-import { asyncDebounce } from "@inrixia/helpers";
 import { MediaItem, PlayState, redux } from "@luna/lib";
 
 import type { SetActivity } from "@xhayper/discord-rpc";
-import { setActivity } from "./discord.native";
+import { fmtStr, getStatusText } from "./activityTextHelpers";
+import { setActivity, StatusDisplayTypeEnum } from "./discord.native";
 import { settings } from "./Settings";
 
-const STR_MAX_LEN = 127;
-const DC_STR_MAX_LEN = 22;
+// Proxy this so we dont try import a node native module
+const StatusDisplayType = await StatusDisplayTypeEnum();
 
-const fmtStr = (s?: string, dc?: boolean) => {
-	if (!s) return;
-	if (s.length < 2) s += " ";
-
-	if (dc) {
-		s = s.replace(/(?:^|\s)([a-z])/g, m => m.toUpperCase());
-		return s.length > DC_STR_MAX_LEN
-			? s.slice(0, DC_STR_MAX_LEN - 3) + "..."
-			: s;
-	}
-
-	return s.length >= STR_MAX_LEN
-		? s.slice(0, STR_MAX_LEN - 3) + "..."
-		: s;
-};
-
-export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
+export const updateActivity = async (mediaItem?: MediaItem) => {
 	if (!PlayState.playing && !settings.displayOnPause) return await setActivity();
 
 	mediaItem ??= await MediaItem.fromPlaybackContext();
 	if (mediaItem === undefined) return;
 
 	const { playbackControls, playQueue } = redux.store.getState();
+	const { volume } = playbackControls;
+	let { sourceName, sourceUrl } = playQueue;
 
 	const activity: SetActivity = { type: 2 }; // Listening type
 
-	const trackUrl = `https://tidal.com/browse/${mediaItem.tidalItem.contentType}/${mediaItem.id}?u`
-
-	const { volume } = playbackControls;
+	const trackUrl = `https://tidal.com/${mediaItem.tidalItem.contentType}/${mediaItem.id}/u`;
+	const trackSourceUrl = `https://tidal.com/browse${sourceUrl}`;
 
 	activity.buttons = [
 		{
 			url: trackUrl,
 			label: `Playing Song @ ${volume}% Volume`,
-		}
+		},
 	];
-
-	// Playing From Source Name
-	let { sourceName, sourceUrl } = playQueue;
-	const trackSourceUrl = `https://tidal.com/browse${sourceUrl}`;
 
 	if (sourceName === "Tracks") sourceName = "Favorite Tracks"
 
 	activity.buttons.push({
-		url: trackSourceUrl ?? "https://example.com",
+		url: trackSourceUrl ?? "https://tidal.com",
 		label: `Playing: ${fmtStr(sourceName, true) ?? "Unknown Source"}`,
 	})
 
 	const artist = await mediaItem.artist();
-	const artistUrl = `https://tidal.com/browse/artist/${artist?.id}?u`;
+	const artistUrl = `https://tidal.com/artist/${artist?.id}/u`;
 
 	// Status text
-	activity.statusDisplayType = Number(settings.status);
+	const statusText = fmtStr(await getStatusText(mediaItem));
+	activity.name = statusText;
 
 	// Title
-	activity.details = await mediaItem.title().then(fmtStr);
+	const trackTitle = fmtStr(await mediaItem.title());
+	activity.details = trackTitle;
 	activity.detailsUrl = trackUrl;
 
 	// Artists
 	const artistNames = await MediaItem.artistNames(await mediaItem.artists());
 	activity.state = fmtStr(artistNames.join(", ")) ?? "Unknown Artist";
 	activity.stateUrl = artistUrl;
+
+	activity.details = trackTitle;
+	activity.statusDisplayType = StatusDisplayType.Name;
 
 	// Pause indicator
 	if (PlayState.playing) {
@@ -96,8 +82,8 @@ export const updateActivity = asyncDebounce(async (mediaItem?: MediaItem) => {
 	if (album) {
 		activity.largeImageKey = album.coverUrl();
 		activity.largeImageText = await album.title().then(fmtStr);
-		activity.largeImageUrl = `https://tidal.com/browse/album/${album.id}?u`;
+		activity.largeImageUrl = `https://tidal.com/album/${album.id}/u`;
 	}
 
 	await setActivity(activity);
-}, true);
+};
