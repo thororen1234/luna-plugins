@@ -11,8 +11,7 @@
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.1",
         "@mui/material": "^7.2.0",
-        "@types/ws": "^8.18.1",
-        "electron": "^37.2.5"
+        "@types/ws": "^8.18.1"
     },
     "dependencies": {
         "ws": "^8.18.3"
